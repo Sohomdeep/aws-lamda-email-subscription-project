@@ -36,6 +36,7 @@ provider:
     USERS_TABLE: ${self:custom.tableName}
     REGION: ${self:provider.region}
     SNS_TOPIC_ARN: arn:aws:sns:ap-south-1:344388310900:quotes-messages-dev
+    SENDGRID_API_KEY: "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"
 
 functions:
   quotes:
@@ -60,6 +61,25 @@ functions:
       - http:
           path: static-mailer
           method: post
+          cors: true
+
+  sendEmail:
+    handler: handler/sendEmail.sendEmail
+    events:
+      - http:
+          path: send-email
+          method: post
+          cors: true
+          #Fire at 1 PM every day UTC (9 am EST) - cron examples: https://docs.oracle.com/cd/E12058_01/doc/doc.1014/e12030/cron_expressions.htm
+     #https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+      - schedule: cron(0 13 * * ? *)
+
+  getSubscribers:
+    handler: handler/getSubscribers.getSubscribers
+    events:
+      - http:
+          path: get-subscribers
+          method: get
           cors: true
 
 resources:
