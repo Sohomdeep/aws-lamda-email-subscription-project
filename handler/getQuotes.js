@@ -16,7 +16,7 @@ module.exports.getQuotes = (event, context, callback) => {
                 callback(new Error(err));
                 return;
             }else{
-                var json = JSON.parse(data.body)
+                var json = JSON.parse(data.Body)
                 console.log("JSON---->", json);
 
                 //create a response
