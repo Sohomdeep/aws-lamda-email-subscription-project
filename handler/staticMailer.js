@@ -1,6 +1,7 @@
 const aws = require("aws-sdk");
 const sns = new aws.SNS();
 const axios = require("axios");
+const BASE_URL = process.env.BASE_URL;
 
 const publishToSNS = (message) =>
   sns
@@ -28,7 +29,7 @@ module.exports.staticMailer = async (event) => {
 
   await axios
     .post(
-      "https://3ob8eoo3c9.execute-api.ap-south-1.amazonaws.com/dev/subscribe",
+        BASE_URL + "subscribe",
       { email: data.email }
     )
     .then(function (response) {

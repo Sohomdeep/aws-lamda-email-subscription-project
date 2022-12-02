@@ -3,12 +3,13 @@
 
 const nodemailer = require('nodemailer');
 const axios = require("axios");
+const BASE_URL = process.env.BASE_URL;
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: "way.no.reply@gmail.com",
-        pass: "iyvkdiasxzhodnqc"
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_KEY
     }
   });
 
@@ -47,7 +48,7 @@ module.exports.sendEmail = async (event) => {
 
 const getSubs = async () => {
   const subscribers = await axios.get(
-    "https://3ob8eoo3c9.execute-api.ap-south-1.amazonaws.com/dev/get-subscribers"
+    BASE_URL + "get-subscribers"
   );
   var list = [];
   subscribers.data.map((sub) => {
@@ -58,7 +59,7 @@ const getSubs = async () => {
 
 const getQuote = async () => {
   const getQuotes = await axios.get(
-    "https://3ob8eoo3c9.execute-api.ap-south-1.amazonaws.com/dev/quotes"
+    BASE_URL + "quotes"
   );
   var length = getQuotes.data.quotes.length;
   var randomQuote = getQuotes.data.quotes[Math.floor(Math.random() * length)];
