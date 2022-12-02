@@ -1,19 +1,37 @@
-const sendgrid = require("@sendgrid/mail");
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+//const sendgrid = require("@sendgrid/mail");
+//sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+
+const nodemailer = require('nodemailer');
 const axios = require("axios");
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: "way.no.reply@gmail.com",
+        pass: "iyvkdiasxzhodnqc"
+    }
+  });
 
 module.exports.sendEmail = async (event) => {
   const randQuote = await getQuote();
   const emailHTML = createEmailHTML(randQuote);
   const subs = await getSubs();
   try {
-    await sendgrid.sendMultiple({
-      to: subs,
-      from: "paulo@buildappswithpaulo.com",
-      subject: `[Daily Words of Wisdom]`,
-      text: "Get Inspired Today",
-      html: emailHTML,
-    });
+    // await sendgrid.sendMultiple({
+    //   to: subs,
+    //   from: "paulo@buildappswithpaulo.com",
+    //   subject: `[Daily Words of Wisdom]`,
+    //   text: "Get Inspired Today",
+    //   html: emailHTML,
+    // });
+
+    await transporter.sendMail({
+        to: subs,
+        from: 'sohomaws@gmail.com',
+        subject: `[Daily Words of Wisdom]`,
+        text: "Get Inspired Today",
+        html: emailHTML,
+      });
   } catch (error) {
     return {
       statusCode: 500,
